@@ -19,7 +19,6 @@ fi
 source ../common/common.sh
 
 check_and_get_source_package ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_URL} ${SOURCE_SHA256SUM}
-
 check_and_unpackage_source ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_DIR_FULL_PATH}
 
 pushd ${SOURCE_DIR}

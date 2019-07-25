@@ -21,21 +21,9 @@ if [ $# == 1 ];then
 	fi
 fi
 
-if [ -f "$file" ]; then
-    md5=`md5sum  $file| awk '{ print $1 }'`
-    if [ $md5 != $file_md5 ]; then
-        wget https://dl.bintray.com/boostorg/release/1.70.0/source/$file
-    fi
-else
-    wget https://dl.bintray.com/boostorg/release/1.70.0/source/$file
-fi
-if [ ! -d "boost_1_70_0" ];then
-    tar -xvf $file
-fi
-
 check_and_get_source_package ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_URL} ${SOURCE_SHA256SUM}
-
 check_and_unpackage_source ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_DIR_FULL_PATH}
+
 
 pushd boost_1_70_0
 
