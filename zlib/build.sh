@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "x"${CROSS_COMPILER} == "x" ];then
-    CROSS_COMPILER=arm-hisiv500-linux
+    CROSS_COMPILER=arm-hisiv600-linux
 fi
 
 SOURCE_PACKAGE="zlib-1.2.11.tar.xz"
@@ -25,13 +25,16 @@ check_and_unpackage_source ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_DIR_FULL_PATH}
 
 pushd ${SOURCE_DIR}
 CHOST=${CROSS_COMPILER} ./configure  --prefix=${SOURCE_DIR_FULL_PATH}/install  --shared
-make -j
-make install
-SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
+make -j && make install
+if [ $? != 0 ];then
+    echo "编译出错，异常退出..."
+    exit -1
+fi
 
+SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
 if [ "x"${SYSROOT} != "x" ];then
-    sudo cp install/include ${SYSROOT}/ -rfd
-    sudo cp install/lib      ${SYSROOT}/ -rfd
+    sudo cp install/include/* ${SYSROOT}/usr/include -rfd
+    sudo cp install/lib/*      ${SYSROOT}/usr/lib -rfd
 fi
 if [ "x"${ROOTFS} != "x" ];then
     cp install/* ${ROOTFS}/ -rfd

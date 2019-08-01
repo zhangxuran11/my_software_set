@@ -37,4 +37,17 @@ fi
 ./bjam --with-system --with-thread --without-python 
 ./b2
 ./b2 install --prefix=./install
+if [ $? != 0 ];then
+    echo "编译出错，异常退出..."
+    exit -1
+fi
+
+SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
+if [ "x"${SYSROOT} != "x" ];then
+    sudo cp install/include/* ${SYSROOT}/usr/include -rfd
+    sudo cp install/lib/*      ${SYSROOT}/usr/lib -rfd
+fi
+if [ "x"${ROOTFS} != "x" ];then
+    cp install/* ${ROOTFS}/ -rfd
+fi
 popd
