@@ -1,6 +1,8 @@
 #!/bin/bash
 
-CROSS_COMPILER=arm-hisiv500-linux-
+if [ "x"${CROSS_COMPILER} == "x" ];then
+    CROSS_COMPILER=arm-hisiv500-linux
+fi
 
 
 SOURCE_PACKAGE="boost_1_70_0.tar.bz2"
@@ -27,12 +29,12 @@ check_and_unpackage_source ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_DIR_FULL_PATH}
 
 pushd boost_1_70_0
 
-./bootstrap.sh --prefix=./install
+./bootstrap.sh --prefix=./install --without-libraries=python
 if [ "x${CROSS_COMPILER}" != "x" ];then
     echo ${CROSS_COMPILER}
-    sed  -i "s/using gcc ;/using gcc : 4.9.4  : ${CROSS_COMPILER}g++ ;/g" project-config.jam
+    sed  -i "s/using gcc ;/using gcc : 4.9.4  : ${CROSS_COMPILER}-g++ ;/g" project-config.jam
 fi
-./bjam --with-libraries=system,thread --without-libraries=python
+./bjam --with-system --with-thread --without-python 
 ./b2
 ./b2 install --prefix=./install
 popd
