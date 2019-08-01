@@ -11,11 +11,29 @@ SOURCE_DIR_FULL_PATH=$(pwd)/${SOURCE_DIR}
 SOURCE_URL="https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.0p1.tar.gz"
 SOURCE_SHA256SUM="bd943879e69498e8031eb6b7f44d08cdc37d59a7ab689aa0b437320c3481fd68"
 
-if [ "x"$1 == "xclean" ];then
-    rm $SOURCE_PACKAGE  2> /dev/null
-    rm $SOURCE_DIR -r  2> /dev/null
+if [ "x"$1 != "x" ];then
+  case $1 in    
+    clean)
+        rm $SOURCE_PACKAGE  2> /dev/null
+        rm $SOURCE_DIR -r  2> /dev/null
+        exit 0
+        ;;
+    install)          
+        pushd ${SOURCE_DIR_FULL_PATH}
+        SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
+        if [ "x"${SYSROOT} != "x" ];then
+            sudo cp install/* ${SYSROOT} -rfd
+        fi
+        if [ "x"${ROOTFS} != "x" ];then
+            cp install/*      ${ROOTFS}/ -rfd
+        fi
+        popd
+        exit 0
+        ;;
+    *)
+        echo './build.sh clean|install'
+  esac
 
-    exit 0
 fi
 
 source ../common/common.sh
@@ -31,8 +49,9 @@ if [ $1 == "force" ];then
 fi
 autoheader
 autoconf
-#./configure --prefix=${SOURCE_DIR_FULL_PATH}/install --host=${CROSS_COMPILER} --without-openssl --without-openssl-header-check  --with-privsep-path=/var/empty --without-pam --disable-strip --disable-static --sysconfdir=/etc/ssh 
-./configure --prefix=${SOURCE_DIR_FULL_PATH}/install --host=${CROSS_COMPILER}    --without-pam --disable-strip --disable-static 
+./configure --prefix=/ --host=${CROSS_COMPILER} --without-openssl --without-openssl-header-check  --with-privsep-path=/var/empty --without-pam --disable-strip --disable-static --sysconfdir=/etc/ssh   --exec-prefix=/
+exit 0
+#./configure --prefix=${SOURCE_DIR_FULL_PATH}/install --host=${CROSS_COMPILER}    --without-pam --disable-strip --disable-static 
 
 if [ $(cat includes.h | wc -l) == 179 ];then
     sed -i 'N;18a\#include <stdarg.h>  //zxr' includes.h   # 在arm-hisiv500-linux(uclibc)环境下报错，找不到va_list类型
@@ -44,13 +63,4 @@ if [ $? != 0 ];then
     exit -1
 fi
 
-#SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
-
-if [ "x"${SYSROOT} != "x" ];then
-    sudo cp install/include ${SYSROOT}/ -rfd
-    sudo cp install/lib      ${SYSROOT}/ -rfd
-fi
-if [ "x"${ROOTFS} != "x" ];then
-    cp install/* ${ROOTFS}/ -rfd
-fi
 popd

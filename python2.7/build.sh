@@ -9,11 +9,28 @@ SOURCE_URL="https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tgz"
 SOURCE_SHA256SUM="01da813a3600876f03f46db11cc5c408175e99f03af2ba942ef324389a83bad5"
 
 
-if [ "x"$1 == "xclean" ];then
-    rm $SOURCE_PACKAGE  2> /dev/null
-    rm $SOURCE_DIR -r  2> /dev/null
+if [ "x"$1 != "x" ];then
+  case $1 in    
+    clean)
+        rm $SOURCE_PACKAGE  2> /dev/null
+        rm $SOURCE_DIR -r  2> /dev/null
+        ;;
+    install)          
+        pushd ${SOURCE_DIR_FULL_PATH}
+        SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
+        if [ "x"${SYSROOT} != "x" ];then
+            sudo cp install/* ${SYSROOT}/ -rfd
+        fi
+        if [ "x"${ROOTFS} != "x" ];then
+            cp install/*      ${ROOTFS}/ -rfd
+        fi
+        popd
+        ;;
+    *)
+        echo './build.sh clean|install'
+  esac
+  exit 0
 
-    exit 0
 fi
 
 if [ "x"${CROSS_COMPILER} == "x" ];then
@@ -30,13 +47,5 @@ CC=${CROSS_COMPILER}-gcc CXX=${CROSS_COMPILER}-g++ ./configure --host=arm-hisiv5
 make -j
 make install
 
-#SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
-if [ "x"${SYSROOT} != "x" ];then
-    sudo cp install/include ${SYSROOT}/ -rfd
-    sudo cp install/lib      ${SYSROOT}/ -rfd
-fi
-if [ "x"${ROOTFS} != "x" ];then
-    cp install/* ${ROOTFS}/ -rfd
-fi
 popd
 

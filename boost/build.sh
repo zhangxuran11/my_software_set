@@ -14,13 +14,28 @@ SOURCE_SHA256SUM="430ae8354789de4fd19ee52f3b1f739e1fba576f0aded0897c3c2bc00fb387
 
 source ../common/common.sh
 
-if [ $# == 1 ];then
-	if [ "x"$1 == "xclean" ];then
-        rm index* 2>/dev/null
-        rm ${SOURCE_DIR} -rf 2>/dev/null      
-        rm ${SOURCE_PACKAGE} -rf 2>/dev/null
-        exit 0
-	fi
+if [ "x"$1 != "x" ];then
+  case $1 in    
+    clean)
+        rm $SOURCE_PACKAGE  2> /dev/null
+        rm $SOURCE_DIR -r  2> /dev/null
+        ;;
+    install)          
+        pushd ${SOURCE_DIR_FULL_PATH}
+        SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
+        if [ "x"${SYSROOT} != "x" ];then
+            sudo cp install/* ${SYSROOT}/ -rfd
+        fi
+        if [ "x"${ROOTFS} != "x" ];then
+            cp install/*      ${ROOTFS}/ -rfd
+        fi
+        popd
+        ;;
+    *)
+        echo './build.sh clean|install'
+  esac
+  exit 0
+
 fi
 
 check_and_get_source_package ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_URL} ${SOURCE_SHA256SUM}
@@ -42,12 +57,4 @@ if [ $? != 0 ];then
     exit -1
 fi
 
-SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
-if [ "x"${SYSROOT} != "x" ];then
-    sudo cp install/include/* ${SYSROOT}/usr/include -rfd
-    sudo cp install/lib/*      ${SYSROOT}/usr/lib -rfd
-fi
-if [ "x"${ROOTFS} != "x" ];then
-    cp install/* ${ROOTFS}/ -rfd
-fi
 popd
