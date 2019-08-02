@@ -1,10 +1,20 @@
-SET(CROSS_COMPILE 1)
+SET(CROSS_COMPILE 0)
+option (BUILD_EXAMPLES "Build websocketpp examples." TRUE)
 option (BUILD_TESTS "Build websocketpp tests." TRUE)
 set (CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/install" CACHE PATH "")
 IF(CROSS_COMPILE) 
-  
 SET(CMAKE_SYSTEM_NAME Linux)
+
 SET(TOOLCHAIN_DIR "/opt/hisi-linux/x86-arm/arm-hisiv500-linux")
+
+#SET(OPENSSL_ROOT_DIR "${TOOLCHAIN_DIR}/target/")
+SET(OPENSSL_INCLUDE_DIR "${TOOLCHAIN_DIR}/target/include/openssl/")
+SET(OPENSSL_CRYPTO_LIBRARY "${TOOLCHAIN_DIR}/target/lib")
+SET(OPENSSL_SSL_LIBRARY "${TOOLCHAIN_DIR}/target/lib/")
+#SET(OPENSSL_VERSION "1.0.2sss")
+SET(ZLIB_LIBRARY "${TOOLCHAIN_DIR}/target/lib")
+SET(ZLIB_INCLUDE_DIR "${TOOLCHAIN_DIR}/target/include")
+
 
 set(CMAKE_CXX_COMPILER arm-hisiv500-linux-g++)
 set(CMAKE_C_COMPILER   arm-hisiv500-linux-gcc)

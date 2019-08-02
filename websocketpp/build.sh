@@ -2,8 +2,8 @@
 if [ "x"${CROSS_COMPILER} == "x" ];then
     CROSS_COMPILER=arm-hisiv500-linux
 fi
-
-SOURCE_DIR="websocketpp"
+SOURCE_PACKAGE="websocketpp-0.8.1.tar"
+SOURCE_DIR="websocketpp-0.8.1"
 SOURCE_DIR_FULL_PATH=$(pwd)/${SOURCE_DIR}
 SOURCE_URL="https://github.com/zaphoyd/websocketpp.git"
 
@@ -11,7 +11,7 @@ SOURCE_URL="https://github.com/zaphoyd/websocketpp.git"
 if [ "x"$1 != "x" ];then
   case $1 in    
     clean)
-        rm $SOURCE_DIR -r  2> /dev/null
+        rm $SOURCE_DIR -r  
         ;;
     install)          
         pushd ${SOURCE_DIR_FULL_PATH}
@@ -31,12 +31,12 @@ if [ "x"$1 != "x" ];then
 
 fi
 if [ ! -d ${SOURCE_DIR} ];then
-    git clone  --branch 0.8.1 ${SOURCE_URL}  ${SOURCE_DIR}
+    tar xvf ${SOURCE_PACKAGE}
     mkdir ${SOURCE_DIR}/build
-    cp ${CROSS_COMPILER}.cmake websocketpp-0.8.1/build
+    cp ${CROSS_COMPILER}.cmake ${SOURCE_DIR}/build/cross.cmake
+    sed -i '8i\include(${CMAKE_CURRENT_SOURCE_DIR}/build/cross.cmake)' ${SOURCE_DIR}/CMakeLists.txt
 fi
-sed -i '8i\include(${CMAKE_CURRENT_SOURCE_DIR}/build/cross.cmake)' ${SOURCE_DIR}/CMakeLists.txt
 pushd ${SOURCE_DIR}/build
-cmake .. && make
+cmake  .. && make
 #make install
 popd

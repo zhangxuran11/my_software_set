@@ -14,15 +14,15 @@ SOURCE_SHA256SUM="bd943879e69498e8031eb6b7f44d08cdc37d59a7ab689aa0b437320c3481fd
 if [ "x"$1 != "x" ];then
   case $1 in    
     clean)
-        rm $SOURCE_PACKAGE  2> /dev/null
         rm $SOURCE_DIR -r  2> /dev/null
         exit 0
         ;;
-    install)          
+    install)
+        cp sshd_config ${SOURCE_DIR_FULL_PATH}/install/etc/ssh/
         pushd ${SOURCE_DIR_FULL_PATH}
         SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
         if [ "x"${SYSROOT} != "x" ];then
-            sudo cp install/* ${SYSROOT} -rfd
+            sudo ls -I bin install   | xargs  -i cp  install/{} ${SYSROOT}/
         fi
         if [ "x"${ROOTFS} != "x" ];then
             cp install/*      ${ROOTFS}/ -rfd
@@ -43,14 +43,13 @@ check_and_unpackage_source ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_DIR_FULL_PATH}
 
 pushd ${SOURCE_DIR}
 
-if [ $1 == "force" ];then
+if [ "$1" == "force" ];then
     rm install -rf
     make distclean
 fi
 autoheader
 autoconf
-./configure --prefix=/ --host=${CROSS_COMPILER} --without-openssl --without-openssl-header-check  --with-privsep-path=/var/empty --without-pam --disable-strip --disable-static --sysconfdir=/etc/ssh   --exec-prefix=/
-exit 0
+./configure --prefix=/ --host=${CROSS_COMPILER}  --with-privsep-path=/var/empty --without-pam --disable-strip --disable-static --sysconfdir=/etc/ssh   --exec-prefix=/
 #./configure --prefix=${SOURCE_DIR_FULL_PATH}/install --host=${CROSS_COMPILER}    --without-pam --disable-strip --disable-static 
 
 if [ $(cat includes.h | wc -l) == 179 ];then

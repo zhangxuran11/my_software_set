@@ -14,14 +14,13 @@ SOURCE_SHA256SUM="cabd5c9492825ce5bd23f3c3aeed6a97f8142f606d893df216411f07d1abab
 if [ "x"$1 != "x" ];then
   case $1 in    
     clean)
-        rm $SOURCE_PACKAGE  2> /dev/null
-        rm $SOURCE_DIR -r  2> /dev/null
+        rm $SOURCE_DIR -rf  
         ;;
     install)          
         pushd ${SOURCE_DIR_FULL_PATH}
         SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
         if [ "x"${SYSROOT} != "x" ];then
-            sudo cp install/* ${SYSROOT}/ -rfd
+            sudo ls -I bin install   | xargs  -i cp  install/{} ${SYSROOT}/
         fi
         if [ "x"${ROOTFS} != "x" ];then
             cp install/*      ${ROOTFS}/ -rfd
@@ -42,7 +41,7 @@ check_and_unpackage_source ${SOURCE_PACKAGE_FULL_PATH} ${SOURCE_DIR_FULL_PATH}
 
 pushd ${SOURCE_DIR}
 ./Configure  -no-ssl3 shared --prefix=${SOURCE_DIR_FULL_PATH}/install  linux-armv4 --cross-compile-prefix=${CROSS_COMPILER}-
-make depend && make -j && make install
+make depend && make  && make install
 if [ $? != 0 ];then
     echo "编译出错，异常退出..."
     exit -1
