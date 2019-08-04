@@ -18,6 +18,7 @@ SET(LWS_OPENSSL_LIBRARIES  "/opt/hisi-linux/x86-arm/arm-hisiv500-linux/target/li
 message( ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" )
 message( $ENV{PKG_CONFIG_PATH} )
 message( "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" )
+option(LWS_WITH_MINIMAL_EXAMPLES "Also build the normally standalone minimal examples, for QA" ON)
 set(CMAKE_CXX_COMPILER arm-hisiv500-linux-g++)
 set(CMAKE_C_COMPILER   arm-hisiv500-linux-gcc)
 set(GNU_FLAGS "-mfpu=vfp -fPIC")
