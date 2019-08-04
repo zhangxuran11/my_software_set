@@ -16,7 +16,6 @@ SET(LWS_OPENSSL_LIBRARIES  "/opt/hisi-linux/x86-arm/arm-hisiv500-linux/target/li
 #SET(ZLIB_INCLUDE_DIR "${TOOLCHAIN_DIR}/target/include")
 
 message( ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" )
-message( $ENV{PKG_CONFIG_PATH} )
 message( "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" )
 option(LWS_WITH_MINIMAL_EXAMPLES "Also build the normally standalone minimal examples, for QA" ON)
 set(CMAKE_CXX_COMPILER arm-hisiv500-linux-g++)

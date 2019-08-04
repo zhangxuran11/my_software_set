@@ -49,6 +49,10 @@ if [ ! -d ${SOURCE_DIR} ];then
     mkdir ${SOURCE_DIR}/build
     cp ${CROSS_COMPILER}.cmake ${SOURCE_DIR}/build/cross.cmake
     sed -i '7i\include(${CMAKE_CURRENT_SOURCE_DIR}/build/cross.cmake)' ${SOURCE_DIR}/CMakeLists.txt
+    cmake --version > /dev/null
+    if [ $? != 0 ];then
+        sudo apt install cmake
+    fi
 fi
 
 pushd ${SOURCE_DIR}/build

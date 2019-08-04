@@ -14,11 +14,14 @@ if [ "x"$1 != "x" ];then
         pushd openssh
         ./build.sh clean
         popd
+        pushd libwebsockets
+        ./build.sh clean
+        popd
 
         ;;
     install)          
         pushd boost
-        ./build.sh install
+        #./build.sh install
         popd
         pushd zlib
         ./build.sh install
@@ -29,6 +32,9 @@ if [ "x"$1 != "x" ];then
         pushd openssh
         ./build.sh install
         popd
+        pushd libwebsockets
+        ./build.sh clean
+        popd
         ;;
     *)
         echo './build.sh clean|install'
@@ -37,14 +43,21 @@ if [ "x"$1 != "x" ];then
 
 fi
 pushd boost
-./build.sh
+#./build.sh
 popd
 pushd zlib
 ./build.sh
+./build.sh install
 popd
 pushd openssl
 ./build.sh
+./build.sh install
 popd
 pushd openssh
 ./build.sh
+popd
+pushd libwebsockets
+./build.sh 
+./build.sh install
+
 popd
