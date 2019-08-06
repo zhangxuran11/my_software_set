@@ -22,7 +22,7 @@ if [ "x"$1 != "x" ];then
         pushd ${SOURCE_DIR_FULL_PATH}
         SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
         if [ "x"${SYSROOT} != "x" ];then
-            sudo ls -I bin install   | xargs  -i cp  install/{} ${SYSROOT}/
+            sudo ls -I bin install   | sudo xargs  -i cp  install/{} ${SYSROOT}/ -rfd
         fi
         if [ "x"${ROOTFS} != "x" ];then
             cp install/*      ${ROOTFS}/ -rfd
