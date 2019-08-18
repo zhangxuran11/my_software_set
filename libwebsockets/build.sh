@@ -56,7 +56,7 @@ if [ ! -d ${SOURCE_DIR} ];then
 fi
 
 pushd ${SOURCE_DIR}/build
-cmake  ..  && make -j && make install
+cmake -DCMAKE_BUILD_TYPE=Debug  ..  && make -j && make install
 #make -j && make install
 if [ $? != 0 ];then
     echo "编译出错，异常退出..."

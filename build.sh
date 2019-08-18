@@ -33,7 +33,7 @@ if [ "x"$1 != "x" ];then
         ./build.sh install
         popd
         pushd libwebsockets
-        ./build.sh clean
+        ./build.sh install
         popd
         ;;
     *)

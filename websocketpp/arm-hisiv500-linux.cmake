@@ -1,4 +1,4 @@
-SET(CROSS_COMPILE 0)
+SET(CROSS_COMPILE 1)
 option (BUILD_EXAMPLES "Build websocketpp examples." TRUE)
 option (BUILD_TESTS "Build websocketpp tests." TRUE)
 set (CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/install" CACHE PATH "")

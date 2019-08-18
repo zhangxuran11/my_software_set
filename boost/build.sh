@@ -5,10 +5,16 @@ if [ "x"${CROSS_COMPILER} == "x" ];then
 fi
 
 
-SOURCE_DIR="boost_1_70_0"
-SOURCE_PACKAGE="boost_1_70_0.tar.bz2"
-SOURCE_URL="https://dl.bintray.com/boostorg/release/1.70.0/source/${SOURCE_PACKAGE}"
-SOURCE_SHA256SUM="430ae8354789de4fd19ee52f3b1f739e1fba576f0aded0897c3c2bc00fb38778"    #for 1.70.0
+#SOURCE_DIR="boost_1_70_0"
+#SOURCE_PACKAGE="boost_1_70_0.tar.bz2"
+#SOURCE_URL="https://dl.bintray.com/boostorg/release/1.70.0/source/${SOURCE_PACKAGE}"
+#SOURCE_SHA256SUM="430ae8354789de4fd19ee52f3b1f739e1fba576f0aded0897c3c2bc00fb38778"    #for 1.70.0
+
+
+SOURCE_DIR="boost_1_65_1"
+SOURCE_PACKAGE="boost_1_65_1.tar.bz2"
+SOURCE_URL="https://dl.bintray.com/boostorg/release/1.65.1/source/${SOURCE_PACKAGE}"
+SOURCE_SHA256SUM="9807a5d16566c57fd74fb522764e0b134a8bbe6b6e8967b83afefd30dcd3be81"    #for 1.65.1
 
 #SOURCE_PACKAGE="boost_1_46_1.bz2"
 #SOURCE_URL="https://jaist.dl.sourceforge.net/project/boost/boost/1.46.1/${SOURCE_PACKAGE}"

@@ -46,9 +46,8 @@ if [ ! -d qtbase/mkspecs/${CROSS_COMPILER}-g++ ];then
     cp  qtbase/mkspecs/linux-arm-gnueabi-g++/ qtbase/mkspecs/${CROSS_COMPILER}-g++/ -r
     sed -i "s/arm-linux-gnueabi/${CROSS_COMPILER}/g" qtbase/mkspecs/${CROSS_COMPILER}-g++/qmake.conf
 fi
-./configure -extprefix ${SOURCE_DIR}/install -prefix / -release -opensource -confirm-license -no-pkg-config -qt-libjpeg -no-opengl -qt-zlib -no-icu  -xplatform ${CROSS_COMPILER}-g++ -no-xcb -no-dbus -v
-
-make -j && make install
+./configure -extprefix $(pwd)/install -prefix / -release -opensource -confirm-license -no-pkg-config -qt-libjpeg -no-opengl -qt-zlib -no-icu  -xplatform ${CROSS_COMPILER}-g++ -no-xcb -no-dbus -v
+make -j 4 module-qtbase && make module-qtbase-install_subtargets
 if [ $? != 0 ];then
     echo "编译出错，异常退出..."
     exit -1
