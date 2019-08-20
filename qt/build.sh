@@ -21,10 +21,16 @@ if [ "x"$1 != "x" ];then
         pushd ${SOURCE_DIR_FULL_PATH}
         SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
         if [ "x"${SYSROOT} != "x" ];then
-            sudo cp install/* ${SYSROOT}/ -rfd
+            sudo cp install/bin ${SYSROOT}/ -rfd
+            sudo cp install/include ${SYSROOT}/ -rfd
+            sudo cp install/lib ${SYSROOT}/ -rfd
+            sudo cp install/mkspecs ${SYSROOT}/ -rfd
+            sudo cp install/plugins ${SYSROOT}/ -rfd
         fi
         if [ "x"${ROOTFS} != "x" ];then
-            cp install/*      ${ROOTFS}/ -rfd
+            cp install/lib ${ROOTFS}/ -rfd
+            cp install/mkspecs ${ROOTFS}/ -rfd
+            cp install/plugins ${ROOTFS}/ -rfd
         fi
         popd
         ;;
@@ -48,6 +54,7 @@ if [ ! -d qtbase/mkspecs/${CROSS_COMPILER}-g++ ];then
 fi
 ./configure -extprefix $(pwd)/install -prefix / -release -opensource -confirm-license -no-pkg-config -qt-libjpeg -no-opengl -qt-zlib -no-icu  -xplatform ${CROSS_COMPILER}-g++ -no-xcb -no-dbus -v
 make -j 4 module-qtbase && make module-qtbase-install_subtargets
+make -j 4 module-qtwebsockets && make module-qtwebsockets-install_subtargets
 if [ $? != 0 ];then
     echo "编译出错，异常退出..."
     exit -1

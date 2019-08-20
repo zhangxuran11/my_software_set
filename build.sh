@@ -1,4 +1,7 @@
 #!/bin/bash
+if [ "x$ROOTFS" == "x" ];then
+    ROOTFS=${TOP_DIRECTOR}/build/out/rootfs
+fi
 if [ "x"$1 != "x" ];then
   case $1 in    
     clean)
@@ -15,6 +18,9 @@ if [ "x"$1 != "x" ];then
         ./build.sh clean
         popd
         pushd libwebsockets
+        ./build.sh clean
+        popd
+        pushd qt
         ./build.sh clean
         popd
 
@@ -35,7 +41,19 @@ if [ "x"$1 != "x" ];then
         pushd libwebsockets
         ./build.sh install
         popd
-        ;;
+        pushd qt
+        ./build.sh install
+        popd
+	
+	rm ${ROOTFS}/include/* -rf 2> /dev/null
+	rm ${ROOTFS}/lib/*.a
+	rm ${ROOTFS}/lib/*.la
+	rm ${ROOTFS}/lib/*.prl
+	rm ${ROOTFS}/lib/cmake -r
+	#rm ${TOP_DIRECTOR}/build/out/rootfs/lib/engines -r
+	rm ${ROOTFS}/lib/pkgconfig -r
+        
+	;;
     *)
         echo './build.sh clean|install'
   esac
