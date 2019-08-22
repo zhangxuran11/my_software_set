@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ "x$ROOTFS" == "x" ];then
-    ROOTFS=${TOP_DIRECTOR}/build/out/rootfs
+    export ROOTFS=${TOP_DIRECTOR}/build/out/rootfs
 fi
 if [ "x"$1 != "x" ];then
   case $1 in    
