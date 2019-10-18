@@ -10,7 +10,8 @@ SOURCE_PACKAGE_FULL_PATH=$(pwd)/${SOURCE_PACKAGE}
 SOURCE_DIR_FULL_PATH=$(pwd)/${SOURCE_DIR}
 SOURCE_URL="https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-8.0p1.tar.gz"
 SOURCE_SHA256SUM="bd943879e69498e8031eb6b7f44d08cdc37d59a7ab689aa0b437320c3481fd68"
-
+        
+SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
 if [ "x"$1 != "x" ];then
   case $1 in    
     clean)
@@ -20,7 +21,6 @@ if [ "x"$1 != "x" ];then
     install)
         cp sshd_config ${SOURCE_DIR_FULL_PATH}/install/etc/ssh/
         pushd ${SOURCE_DIR_FULL_PATH}
-        SYSROOT=$(${CROSS_COMPILER}-gcc --print-sysroot)
         if [ "x"${SYSROOT} != "x" ];then
             sudo ls -I bin install   | sudo xargs  -i cp  install/{} ${SYSROOT}/ -rfd
         fi
@@ -49,7 +49,7 @@ if [ "$1" == "force" ];then
 fi
 autoheader
 autoconf
-./configure --prefix=/ --host=${CROSS_COMPILER}  --with-privsep-path=/var/empty --without-pam --disable-strip --disable-static --sysconfdir=/etc/ssh   --exec-prefix=/
+./configure --prefix=/ --host=${CROSS_COMPILER}  --with-privsep-path=/var/empty --without-pam --disable-strip --disable-static --sysconfdir=/etc/ssh   --exec-prefix=/ --with-zlib=${SYSROOT}
 #./configure --prefix=${SOURCE_DIR_FULL_PATH}/install --host=${CROSS_COMPILER}    --without-pam --disable-strip --disable-static 
 
 if [ $(cat includes.h | wc -l) == 179 ];then
