@@ -79,3 +79,7 @@ pushd libwebsockets
 ./build.sh install
 
 popd
+pushd qt
+./build.sh
+./build.sh install
+popd
