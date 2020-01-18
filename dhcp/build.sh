@@ -47,6 +47,7 @@ fi
 
 pushd ${SOURCE_DIR}
 export CC="$CROSS_COMPILER-gcc -D_GNU_SOURCE"
+export BUILD_CC=gcc
 export LDFLAGS=-pthread
 CHOST=${CROSS_COMPILER} ./configure --prefix=$(pwd)/install --host=arm-linux --with-randomdev=no --enable-dhcpv6=no --with-bind-extra-config="--host=arm --with-randomdev=no --with-openssl=no  --with-libxml2=no --with-zlib=no"
 make  && make install
