@@ -10,7 +10,6 @@ SOURCE_PACKAGE_FULL_PATH=$(pwd)/${SOURCE_PACKAGE}
 SOURCE_DIR_FULL_PATH=$(pwd)/${SOURCE_DIR}
 SOURCE_URL="http://www.zlib.net/zlib-1.2.11.tar.xz"
 SOURCE_SHA256SUM="4ff941449631ace0d4d203e3483be9dbc9da454084111f97ea0a2114e19bf066"
-
 if [ "x"$1 != "x" ];then
   case $1 in    
     clean)
