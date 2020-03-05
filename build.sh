@@ -23,6 +23,9 @@ if [ "x"$1 != "x" ];then
         pushd qt
         ./build.sh clean
         popd
+        pushd jsoncpp
+        ./build.sh clean
+        popd
 
         ;;
     install)          
@@ -42,6 +45,9 @@ if [ "x"$1 != "x" ];then
         ./build.sh install
         popd
         pushd qt
+        ./build.sh install
+        popd
+        pushd jsoncpp
         ./build.sh install
         popd
 	
@@ -80,6 +86,10 @@ pushd libwebsockets
 
 popd
 pushd qt
+./build.sh
+./build.sh install
+popd
+pushd jsoncpp
 ./build.sh
 ./build.sh install
 popd
